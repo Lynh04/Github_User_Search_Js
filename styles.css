@@ -322,3 +322,6 @@ header {
 .dark .user-avatar img {
   border: 2px solid #334155;
 }
+.user-meta {
+  color: #cbd5e1;
+}
