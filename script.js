@@ -1,7 +1,9 @@
 const searchForm = document.getElementById("searchForm");
 const searchInput = document.getElementById("searchInput");
 const welcomeCardContainer = document.getElementById("welcomeCardContainer");
+const themeToggle = document.getElementById("themeToggle");
 
+const theme = localStorage.getItem("theme") || "light";
 //tạo function renderWelcome từ welcome-card trước
 function renderWelcome() {
   welcomeCardContainer.innerHTML = `
@@ -59,7 +61,7 @@ function renderUser(user) {
               @${user.login}
             </a>
 
-            <p>${user.bio || "This profile has no bio"}</p>
+            <p class="user-bio" >${user.bio || "This profile has no bio"}</p>
 
             <div class="user-stats">
               <div class="user-stat">
@@ -78,12 +80,14 @@ function renderUser(user) {
 
             <div class="user-meta">
               <div>Joined ${new Date(user.created_at).toDateString()}</div>
-              <div>${user.location || "Unknown"}</div>
+              ${user.location ? `<div>${user.location}</div>` : ""}
               ${
                 user.blog
                   ? `<a href="${user.blog}" target="_blank">${user.blog}</a>`
                   : ""
               }
+              ${user.company ? `<div>${user.company}</div>` : ""}
+
             </div>
           </div>
 
@@ -120,3 +124,48 @@ searchForm.addEventListener("submit", (event) => {
 });
 
 renderWelcome();
+
+themeToggle.addEventListener("click", () => {
+  const currentTheme = localStorage.getItem("theme");
+  if (currentTheme === "light") {
+    localStorage.setItem("theme", "dark");
+    document.body.classList.add("dark");
+    //themeToggle have svg icon change to moon
+    themeToggle.innerHTML = `
+    <svg class="moon-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+    `;
+  } else {
+    localStorage.setItem("theme", "light");
+    document.body.classList.remove("dark");
+    themeToggle.innerHTML = `
+    <svg class="sun-icon"  width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42">
+        </path>
+    </svg>
+    `;
+  }
+});
+
+if (theme === "dark") {
+  document.body.classList.add("dark");
+
+  themeToggle.innerHTML = `
+    <svg class="moon-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+    `;
+} else {
+  document.body.classList.remove("dark");
+  // sun-icon have style    transform: rotate(-90deg) scale(0);
+  themeToggle.innerHTML = `
+    <svg class="sun-icon"  width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42">
+        </path>
+    </svg>
+    `;
+    
+}
